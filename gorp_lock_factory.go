@@ -8,20 +8,22 @@ import (
 	"gopkg.in/gorp.v1"
 )
 
+// GorpLockFactory gorp的锁工厂，可以创建好多锁啥的
 type GorpLockFactory struct {
 	dbMap *gorp.DbMap
 	*storage_lock_factory.StorageLockFactory[*sql.DB]
 }
 
+// NewGorpLockFactory 从*gorp.DbMap中创建
 func NewGorpLockFactory(dbMap *gorp.DbMap) (*GorpLockFactory, error) {
 	connectionManager := NewGorpConnectionManager(dbMap)
 
-	storage, err := CreateStorageForGorp(dbMap, connectionManager)
+	gorpStorage, err := CreateStorageForGorp(dbMap)
 	if err != nil {
 		return nil, err
 	}
 
-	factory := storage_lock_factory.NewStorageLockFactory[*sql.DB](storage, connectionManager)
+	factory := storage_lock_factory.NewStorageLockFactory[*sql.DB](gorpStorage, connectionManager)
 
 	return &GorpLockFactory{
 		dbMap:              dbMap,
@@ -30,6 +32,6 @@ func NewGorpLockFactory(dbMap *gorp.DbMap) (*GorpLockFactory, error) {
 }
 
 // CreateStorageForGorp 尝试从gorp创建Storage
-func CreateStorageForGorp(dbMap *gorp.DbMap, connectionManager storage.ConnectionManager[*sql.DB]) (storage.Storage, error) {
-	return sqldb_storage.NewStorageBySqlDb(dbMap.Db, connectionManager)
+func CreateStorageForGorp(dbMap *gorp.DbMap) (storage.Storage, error) {
+	return sqldb_storage.NewStorage(dbMap.Db)
 }
