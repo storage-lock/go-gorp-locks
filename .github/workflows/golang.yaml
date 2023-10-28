@@ -7,6 +7,8 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+
+      # 准备mysql环境
       # action文档：
       # https://github.com/marketplace/actions/setup-mysql
       - uses: mirromutth/mysql-action@v1.1
@@ -22,6 +24,11 @@ jobs:
       #          mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
       #          mysql password: ${{ secrets.DatabasePassword }} # Required if "mysql user" exists. The password for the "mysql user"
 
+      # 准备postgresql环境
+      # action文档：
+      # https://github.com/marketplace/actions/postgresql-in-github-actions
+      - uses: nnhy/postgresql-action@v1.0
+
       - uses: actions/checkout@v3
 
       - name: Set up Go
@@ -33,3 +40,5 @@ jobs:
         run: go test -v ./...
         env:
           STORAGE_LOCK_MYSQL_DSN: "root:UeGqAm8CxYGldMDLoNNt@tcp(127.0.0.1:3306)/storage_lock_test"
+          STORAGE_LOCK_POSTGRESQL_DSN: "host=127.0.0.1 user=postgres password=postgres port=5432 dbname=postgres sslmode=disable"
+          STORAGE_LOCK_SQLITE3_DB_PATH: "storage_lock_test.db3"
