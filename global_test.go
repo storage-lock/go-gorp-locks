@@ -10,17 +10,41 @@ import (
 	"testing"
 )
 
-func TestNewGorpLockBySqlDb(t *testing.T) {
-
+func TestMysql(t *testing.T) {
 	mysqlDsn := os.Getenv("STORAGE_LOCK_MYSQL_DSN")
 	assert.NotEmpty(t, mysqlDsn)
 
 	db, err := sql.Open("mysql", mysqlDsn)
 	assert.Nil(t, err)
 
-	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
+	testSqlDb(t, db)
+}
 
-	factory, err := GetGorpLockFactory(context.Background(), dbmap)
+func TestPostgreSQL(t *testing.T) {
+	postgresqlDsn := os.Getenv("STORAGE_LOCK_POSTGRESQL_DSN")
+	assert.NotEmpty(t, postgresqlDsn)
+
+	db, err := sql.Open("postgres", postgresqlDsn)
+	assert.Nil(t, err)
+
+	testSqlDb(t, db)
+}
+
+func TestSqlite3(t *testing.T) {
+	dbPath := os.Getenv("STORAGE_LOCK_SQLITE3_DB_PATH")
+	assert.NotEmpty(t, dbPath)
+
+	db, err := sql.Open("sqlite3", dbPath)
+	assert.Nil(t, err)
+
+	testSqlDb(t, db)
+}
+
+// 单元测试的公共逻辑提取
+func testSqlDb(t *testing.T, db *sql.DB) {
+	dbMap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
+
+	factory, err := GetGorpLockFactory(context.Background(), dbMap)
 	assert.Nil(t, err)
 
 	storage_lock_test_helper.PlayerNum = 10
