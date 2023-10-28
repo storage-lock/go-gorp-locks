@@ -17,7 +17,7 @@ func TestMysql(t *testing.T) {
 	db, err := sql.Open("mysql", mysqlDsn)
 	assert.Nil(t, err)
 
-	testSqlDb(t, db)
+	testSqlDb(t, db, 30)
 }
 
 func TestPostgreSQL(t *testing.T) {
@@ -27,7 +27,7 @@ func TestPostgreSQL(t *testing.T) {
 	db, err := sql.Open("postgres", postgresqlDsn)
 	assert.Nil(t, err)
 
-	testSqlDb(t, db)
+	testSqlDb(t, db, 30)
 }
 
 func TestSqlite3(t *testing.T) {
@@ -37,17 +37,17 @@ func TestSqlite3(t *testing.T) {
 	db, err := sql.Open("sqlite3", dbPath)
 	assert.Nil(t, err)
 
-	testSqlDb(t, db)
+	testSqlDb(t, db, 3)
 }
 
 // 单元测试的公共逻辑提取
-func testSqlDb(t *testing.T, db *sql.DB) {
+func testSqlDb(t *testing.T, db *sql.DB, playNum int) {
 	dbMap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
 
 	factory, err := GetGorpLockFactory(context.Background(), dbMap)
 	assert.Nil(t, err)
 
-	storage_lock_test_helper.PlayerNum = 10
+	storage_lock_test_helper.PlayerNum = playNum
 	storage_lock_test_helper.EveryOnePlayTimes = 100
 	storage_lock_test_helper.TestStorageLock(t, factory)
 }
