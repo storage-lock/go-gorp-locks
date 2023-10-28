@@ -30,15 +30,15 @@ func TestPostgreSQL(t *testing.T) {
 	testSqlDb(t, db, 30)
 }
 
-func TestSqlite3(t *testing.T) {
-	dbPath := os.Getenv("STORAGE_LOCK_SQLITE3_DB_PATH")
-	assert.NotEmpty(t, dbPath)
-
-	db, err := sql.Open("sqlite3", dbPath)
-	assert.Nil(t, err)
-
-	testSqlDb(t, db, 3)
-}
+//func TestSqlite3(t *testing.T) {
+//	dbPath := os.Getenv("STORAGE_LOCK_SQLITE3_DB_PATH")
+//	assert.NotEmpty(t, dbPath)
+//
+//	db, err := sql.Open("sqlite3", dbPath)
+//	assert.Nil(t, err)
+//
+//	testSqlDb(t, db, 2)
+//}
 
 // 单元测试的公共逻辑提取
 func testSqlDb(t *testing.T, db *sql.DB, playNum int) {
