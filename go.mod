@@ -1,14 +1,15 @@
 module github.com/storage-lock/go-gorp-locks
 
-go 1.19
+go 1.23
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2
+	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/storage-lock/go-sqldb-storage v0.0.0-20231028175514-478f6e19ee0b
 	github.com/storage-lock/go-storage v0.0.2
 	github.com/storage-lock/go-storage-lock v0.0.5
 	github.com/storage-lock/go-storage-lock-factory v0.0.2
-	github.com/storage-lock/go-storage-lock-test-helper v0.0.0-20230903094413-294180fc1228
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.11.1
 	gopkg.in/gorp.v1 v1.7.2
 )
 
@@ -22,9 +23,8 @@ require (
 	github.com/golang-infrastructure/go-reflect-utils v0.0.0-20221130143747-965ef2eb09c3 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
-	github.com/google/uuid v1.4.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/lib/pq v1.10.9 // indirect
-	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/storage-lock/go-events v0.0.3 // indirect
 	github.com/storage-lock/go-mysql-storage v0.0.3-0.20230923200627-de392591593c // indirect
@@ -38,3 +38,19 @@ require (
 	golang.org/x/crypto v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/storage-lock/go-storage => ../go-storage
+
+replace github.com/storage-lock/go-storage-lock => ../go-storage-lock
+
+replace github.com/storage-lock/go-sqldb-storage => ../go-sqldb-storage
+
+replace github.com/storage-lock/go-mysql-storage => ../go-mysql-storage
+
+replace github.com/storage-lock/go-postgresql-storage => ../go-postgresql-storage
+
+replace github.com/storage-lock/go-sql-based-storage => ../go-sql-based-storage
+
+replace github.com/storage-lock/go-sqlite3-storage => ../go-sqlite3-storage
+
+replace github.com/storage-lock/go-sqlserver-storage => ../go-sqlserver-storage

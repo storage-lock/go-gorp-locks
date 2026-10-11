@@ -11,6 +11,10 @@ import (
 // 用于管理工厂的工厂，主要是为了能够同时支持多个实例
 var gorpStorageLockFactoryBeanFactory *storage_lock_factory.StorageLockFactoryBeanFactory[*gorp.DbMap, *sql.DB] = storage_lock_factory.NewStorageLockFactoryBeanFactory[*gorp.DbMap, *sql.DB]()
 
+// newGorpLockFactory 指向 NewGorpLockFactory，包级变量以便单测注入构造失败，
+// 覆盖 GetOrInit initFunc 的错误分支。
+var newGorpLockFactory = NewGorpLockFactory
+
 // NewGorpLock
 // @Description: 基于gorp创建一把分布式锁
 // @param ctx
@@ -49,7 +53,7 @@ func NewGorpLockWithOptions(ctx context.Context, dbMap *gorp.DbMap, options *sto
 // @return error
 func GetGorpLockFactory(ctx context.Context, dbMap *gorp.DbMap) (*storage_lock_factory.StorageLockFactory[*sql.DB], error) {
 	return gorpStorageLockFactoryBeanFactory.GetOrInit(ctx, dbMap, func(ctx context.Context) (*storage_lock_factory.StorageLockFactory[*sql.DB], error) {
-		lockFactory, err := NewGorpLockFactory(dbMap)
+		lockFactory, err := newGorpLockFactory(dbMap)
 		if err != nil {
 			return nil, err
 		}

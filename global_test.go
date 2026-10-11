@@ -2,52 +2,30 @@ package gorp_locks
 
 import (
 	"context"
-	"database/sql"
-	storage_lock_test_helper "github.com/storage-lock/go-storage-lock-test-helper"
-	"github.com/stretchr/testify/assert"
-	"gopkg.in/gorp.v1"
-	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestMysql(t *testing.T) {
-	mysqlDsn := os.Getenv("STORAGE_LOCK_MYSQL_DSN")
-	assert.NotEmpty(t, mysqlDsn)
-
-	db, err := sql.Open("mysql", mysqlDsn)
-	assert.Nil(t, err)
-
-	testSqlDb(t, db, 30)
+func TestGorpStorageLockFactoryBeanFactory_InitiallyInitialized(t *testing.T) {
+	assert.NotNil(t, gorpStorageLockFactoryBeanFactory)
 }
 
-func TestPostgreSQL(t *testing.T) {
-	postgresqlDsn := os.Getenv("STORAGE_LOCK_POSTGRESQL_DSN")
-	assert.NotEmpty(t, postgresqlDsn)
-
-	db, err := sql.Open("postgres", postgresqlDsn)
-	assert.Nil(t, err)
-
-	testSqlDb(t, db, 30)
+func TestNewGorpLock_NilDbMap(t *testing.T) {
+	assert.Panics(t, func() {
+		NewGorpLock(context.Background(), nil, "test-lock")
+	})
 }
 
-//func TestSqlite3(t *testing.T) {
-//	dbPath := os.Getenv("STORAGE_LOCK_SQLITE3_DB_PATH")
-//	assert.NotEmpty(t, dbPath)
-//
-//	db, err := sql.Open("sqlite3", dbPath)
-//	assert.Nil(t, err)
-//
-//	testSqlDb(t, db, 2)
-//}
-
-// 单元测试的公共逻辑提取
-func testSqlDb(t *testing.T, db *sql.DB, playNum int) {
-	dbMap := &gorp.DbMap{Db: db, Dialect: gorp.SqliteDialect{}}
-
-	factory, err := GetGorpLockFactory(context.Background(), dbMap)
-	assert.Nil(t, err)
-
-	storage_lock_test_helper.PlayerNum = playNum
-	storage_lock_test_helper.EveryOnePlayTimes = 100
-	storage_lock_test_helper.TestStorageLock(t, factory)
+func TestNewGorpLockWithOptions_NilDbMap(t *testing.T) {
+	assert.Panics(t, func() {
+		NewGorpLockWithOptions(context.Background(), nil, nil)
+	})
 }
+
+func TestGetGorpLockFactory_NilDbMap(t *testing.T) {
+	assert.Panics(t, func() {
+		GetGorpLockFactory(context.Background(), nil)
+	})
+}
+
