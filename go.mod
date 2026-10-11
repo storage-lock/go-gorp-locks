@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/mattn/go-sqlite3 v1.14.17
-	github.com/storage-lock/go-sqldb-storage v0.0.0-20231028175514-478f6e19ee0b
+	github.com/storage-lock/go-sqldb-storage v0.0.2
 	github.com/storage-lock/go-storage v0.0.3
 	github.com/storage-lock/go-storage-lock v0.0.6
 	github.com/storage-lock/go-storage-lock-factory v0.0.2
@@ -38,5 +38,3 @@ require (
 	golang.org/x/crypto v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/storage-lock/go-sqldb-storage => ../go-sqldb-storage
